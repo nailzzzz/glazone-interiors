@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Allow public read for all images
+    match /{allPaths=**} {
+      allow read: if true;
+    }
+
+    // Specific folders: Admin write
+    match /services/{allPaths=**} {
+      allow write: if isAuthenticated();
+    }
+    
+    match /products/{allPaths=**} {
+      allow write: if isAuthenticated();
+    }
+    
+    match /projects/{allPaths=**} {
+      allow write: if isAuthenticated();
+    }
+    
+    match /gallery/{allPaths=**} {
+      allow write: if isAuthenticated();
+    }
+  }
+}
